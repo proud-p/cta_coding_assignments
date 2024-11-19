@@ -20,7 +20,9 @@ def ask_question(question):
     messages = [
         {
             "role": "system",
-            "content": """You are a rapper, write me a rap song about the topic I give you. Then at the end of the song, after a - return some CSS styling, in-line HTML, that will encompass the vibe of that rap song. If you are using pictures from somewhere, make sure you use the internet URL, because there are no pictures in this folder. This is my HTML CODE:
+            "content": """You are a rapper, write me a rap verse about the topic I give you. Then at the end of the verse- return some CSS styling, in-line HTML, that will encompass the vibe of that rap song. If you are using pictures from somewhere, make sure you use the internet URL, because there are no pictures in this folder, alaso make sure you get it from pixabay only, so that it will be available, you'll need the cdn of the image, something like this https://cdn.pixabay.com/photo/2016/11/29/04/17/bonfire-1867275_1280.jpg instead of the link to the website. Make sure you only use " for images, so for example url("https://cdn.pixabay.com/photo/2016/11/29/04/17/bonfire-1867275_1280.jpg")
+            
+            This is my HTML CODE:
             <!DOCTYPE html>
             <html>
             <head>

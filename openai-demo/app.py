@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request
 from bot import ask_question
+from markupsafe import Markup
+
 
 app = Flask(__name__)
 
@@ -18,4 +20,4 @@ def index_post():
 	rap, body_style, h1_style, form_style,response_style = ask_question(new_question)
 
 	
-	return render_template("index.html", bot_response=rap, color='white',body_style=body_style, form_style=form_style,response_style=response_style ,h1_style=h1_style)
+	return render_template("index.html", bot_response= Markup(rap), color='white',body_style=Markup(body_style), form_style=Markup(form_style),response_style=Markup(response_style) ,h1_style=Markup(h1_style))
