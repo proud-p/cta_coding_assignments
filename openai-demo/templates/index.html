@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RAP BOT!</title>
+    <style>
+        body {
+            {{ body_style }}
+        }
+        h1 {
+            {{ h1_style }}
+        }
+        .form_div {
+            {{ form_style }}
+        }
+        .response_div {
+            {{ response_style }}
+        }
+    </style>
+</head>
+<body>
+    <h1>RAP IT!</h1>
+    <div class="form_div">
+        <form method="POST">
+            <label>Question:</label>
+            <input name="question" type="text" value="{{ my_question }}"><br><br>
+            <input type="submit" value="Submit"><br><br>
+        </form>
+    </div>
+    <div class="response_div">
+        <p>{{ bot_response }}</p>
+    </div>
+</body>
+</html>

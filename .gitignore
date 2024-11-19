@@ -3,6 +3,7 @@ data/*
 *.pptx
 *.ppt
 *.pdf
+*api_keys*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
