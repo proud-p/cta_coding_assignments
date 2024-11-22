@@ -12,12 +12,12 @@ default_style = "background-color: white"
 @app.route('/')
 def index():
 	answer = ask_question(new_question)
-	return render_template("index.html", bot_response=answer, color='white',body_style=default_style, form_style=default_style,response_style=default_style ,h1_style=default_style)
+	return render_template("index.html", bot_response=answer, color='white',body_style=default_style, form_style=default_style,response_style=default_style ,h1_style=default_style, animations=None)
 
 @app.route('/', methods = ['POST'])
 def index_post():
 	new_question = request.form['question']
-	rap, body_style, h1_style, form_style,response_style = ask_question(new_question)
+	rap, body_style, h1_style, form_style,response_style,animations = ask_question(new_question)
 
 	
-	return render_template("index.html", bot_response= Markup(rap), color='white',body_style=Markup(body_style), form_style=Markup(form_style),response_style=Markup(response_style) ,h1_style=Markup(h1_style))
+	return render_template("index.html", bot_response= Markup(rap), color='white',body_style=Markup(body_style), form_style=Markup(form_style),response_style=Markup(response_style) ,h1_style=Markup(h1_style),animations=Markup(animations))

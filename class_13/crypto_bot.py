@@ -11,10 +11,17 @@ client = AzureOpenAI(
 )
 
 def get_crypto_price(crypto_name,fiat_currency):
+    url=f"https://api.coingecko.com/api/v3/coins/markets?vs_currency={fiat_currency}"
+    response = requests.get(url=url)
+    data = response.json()
+
+    print(url)
+    current_price = [coin['current_price'] for coin in data if coin['id']==crypto_name][0]
+    return print(f"Current price:{current_price}")
 
 
 messages = [
-    {"role":"user", "content":"Find the current price of ethereum in Euros"}
+    {"role":"user", "content":"Find the current price of ethereum in Euros, use the official abbreviation, so return Euros as eur"}
 ]
 
 functions = [
@@ -55,12 +62,12 @@ response = client.chat.completions.create(
 gpt_tools=response.choices[0].message.tool_calls
 # we want to add response message into chatgpt history so it knows it used a function and is not just confused
 response_message = response.choices[0].message
-
+print(response_message)
 
 # not none
 if gpt_tools:
     available_functions={
-        "get_crypto_price": get_crypto_price()
+        "get_crypto_price": get_crypto_price
     }
 
     messages.append(response_message)
@@ -68,6 +75,10 @@ if gpt_tools:
     for gpt_tool in gpt_tools:
         function_name=gpt_tool.function.name
         function_to_call = available_functions[function_name]
+        function_parameters=json.loads(gpt_tool.function.arguments)
+        print('FUNCTION PARAMS')
+        print(gpt_tool.function)
+        function_to_call(function_parameters.get('crypto'),function_parameters.get('currency'))
 
 else:
     print(response.choices[0].message)
