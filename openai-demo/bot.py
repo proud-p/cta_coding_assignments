@@ -8,49 +8,52 @@ client = AzureOpenAI(
 )
 
 def parse_response(chat_response):
-    rap = chat_response.split("ANSWER:")[0]
-    chat_response = chat_response.split("ANSWER:")[1]
-    body_style = chat_response.split("body_style:")[1]
-    header_style = chat_response.split("h1_style:")[1]
-    form_style = chat_response.split("form_style:")[1]
-    response_style = chat_response.split("response_style:")[1]
-    return rap, body_style, header_style, form_style, response_style
+    try:
+        # Split the response into the rap and styles
+        rap, styles = chat_response.split("ANSWER:")
+        
+        # Extract each style by splitting on the specific keys
+        body_style = styles.split("body_style:")[1].split("h1_style:")[0].strip().strip('"')
+        h1_style = styles.split("h1_style:")[1].split("form_style:")[0].strip().strip('"')
+        form_style = styles.split("form_style:")[1].split("response_style:")[0].strip().strip('"')
+        response_style = styles.split("response_style:")[1].strip().strip('"')
+
+        # Return the rap and all styles as separate values
+        return rap.strip(), body_style, h1_style, form_style, response_style
+    except Exception as e:
+        raise ValueError(f"Error parsing response: {e}")
+
 
 def ask_question(question):
     messages = [
         {
             "role": "system",
-            "content": """You are a rapper, write me a rap verse about the topic I give you. Then at the end of the verse- return some CSS styling, in-line HTML, that will encompass the vibe of that rap song. If you are using pictures from somewhere, make sure you use the internet URL, because there are no pictures in this folder, alaso make sure you get it from pixabay only, so that it will be available, you'll need the cdn of the image, something like this https://cdn.pixabay.com/photo/2016/11/29/04/17/bonfire-1867275_1280.jpg instead of the link to the website. Make sure you only use " for images, so for example url("https://cdn.pixabay.com/photo/2016/11/29/04/17/bonfire-1867275_1280.jpg")
-            
-            This is my HTML CODE:
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="utf-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-                <title>RAP BOT!</title>
-            </head>
-            <body style="{{body_style}}">
-                <h1 style="{{h1_style}}">RAP IT!</h1>
-                <div class="form-div" style="{{form_style}}">
-                    <form method="POST">
-                        <label>Question:</label>
-                        <!-- the double {} pulls the variable from our python script -->
-                        <input name="question" type="text" value={{my_question}}><br><br>
-                        <input type="submit" value="Submit"><br><br>
-                    </form>
-                </div>
-                <div style="{{response_style}}"><p>{{bot_response}}</p></div>
-            </body>
-            </html>
-            
-            Please answer like this so I can parse it properly, and spell everything properly as well:
-            ANSWER:
-            body_style:
-            h1_style:
-            form_style:
-            response_style:
-            """
+            "content": """
+                    You are a rapper. Write me a rap verse based on the topic I give you. After the rap, provide CSS styling in **inline format** that matches the vibe of the rap. Follow these exact rules:
+
+                    1. Your response must start with a rap verse.
+                    2. After the verse, provide an `ANSWER:` section in this strict format:
+                    ANSWER:
+                    body_style: "..."
+                    h1_style: "..."
+                    form_style: "..."
+                    response_style: "..."
+
+                    3. Each style must only contain CSS for the specified placeholder:
+                    - `body_style`: Styling for the `<body>` element.
+                    - `h1_style`: Styling for the `<h1>` element.
+                    - `form_style`: Styling for the `<div>` containing the form.
+                    - `response_style`: Styling for the `<div>` containing the bot's response.
+
+                    4. Inline animations must be embedded directly within the style for each placeholder. Use this format:
+                    animation: myAnimation 3s infinite; @keyframes myAnimation {0% {color: #FFF;} 50% {color: #FFD700;} 100% {color: #FFF;}}
+
+
+
+                    5. Do not include any additional text, explanations, or comments outside of the rap verse and the `ANSWER:` section.
+                    """
+
+
         },
         {"role": "user", "content": question}
     ]
@@ -62,24 +65,24 @@ def ask_question(question):
 
     rap, body_style, h1_style, form_style, response_style = parse_response(response.choices[0].message.content)
 
-    print("rap")
-    print("------")
-    print(rap)
+    # print("rap")
+    # print("------")
+    # print(rap)
 
-    print("body_style")
-    print("------")
-    print(body_style)
+    # print("body_style")
+    # print("------")
+    # print(body_style)
 
-    print("h1")
-    print("------")
-    print(h1_style)
+    # print("h1")
+    # print("------")
+    # print(h1_style)
 
-    print("form")
-    print("------")
-    print(form_style)
+    # print("form")
+    # print("------")
+    # print(form_style)
 
-    print("response")
-    print("------")
-    print(response_style)
+    # print("response")
+    # print("------")
+    # print(response_style)
 
     return rap, body_style, h1_style, form_style, response_style
